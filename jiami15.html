@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>甲醚</title>
+<link href="style/jiami15.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<header>
+<h1>甲醚</h1>
+<div class="version-badge">v15 - Effective Rotation &amp; Custom Libraries</div>
+<p class="subtitle">"Enter text"</p>
+<div class="warning">To protect information security, do not let others view your screen or expose plaintext information.</div>
+</header>
+<div class="main-content">
+<div class="section"><div class="section-title-row"><h2>Encrypt</h2></div>
+<div class="input-group">
+<label for="plaintext">Text to encrypt:</label>
+<textarea id="plaintext" placeholder="Enter the text to encrypt...">Made by Litaiqi_Daquavis</textarea>
+</div>
+<div class="btn-group">
+<button class="encrypt-btn" id="encrypt-btn" aria-disabled="false"> Encrypt Text</button>
+<button class="clear-btn" id="clear-encrypt">Clear</button>
+</div>
+<div class="result-container">
+<div class="result-label">Encryption Result(Ciphertext):</div>
+<div class="result" id="encrypted-result">Waiting to encrypt...</div>
+</div><div class="encryption-key-tools"><button aria-controls="key-modal" aria-haspopup="dialog" class="section-key-button" data-key-target="encrypt-key-section" type="button" aria-invalid="false" data-error-count="">🔑 Input Encryption Keys</button><button aria-controls="output-key-modal" aria-haspopup="dialog" class="section-key-button output-key-button" disabled="" id="open-output-key-modal" type="button">📤 View Output Keys</button></div>
+<div class="noise-canvas-container">
+<div class="noise-canvas-label">🌊 Perlin noise curve visualization(offset values within ciphertext length)</div>
+<canvas height="150" id="noise-canvas" width="1100"></canvas>
+</div>
+<div class="status-info">
+<div class="status-item">
+<div class="status-label">Lib 1current rotations</div>
+<div class="status-value" id="lib1-rotations">00</div>
+</div>
+<div class="status-item">
+<div class="status-label">Lib 2current rotations</div>
+<div class="status-value" id="lib2-rotations">00</div>
+</div>
+<div class="status-item">
+<div class="status-label">Lib 3current rotations</div>
+<div class="status-value" id="lib3-rotations">00</div>
+</div>
+</div>
+</div>
+<div class="section"><div class="section-title-row"><h2>Decrypt</h2><button aria-controls="key-modal" aria-haspopup="dialog" class="section-key-button" data-key-target="decrypt-key-section" type="button" aria-invalid="false" data-error-count="">🔑 Decryption Keys</button></div>
+<div class="input-group">
+<label for="ciphertext">Text to decrypt:</label>
+<textarea id="ciphertext" placeholder="Enter the text to decrypt..."></textarea>
+</div>
+<div class="btn-group">
+<button class="encrypt-btn" id="decrypt-btn" disabled="" aria-disabled="true"> Decrypt Text</button>
+<button class="clear-btn" id="clear-decrypt">Clear</button>
+</div>
+<div class="result-container">
+<div class="result-label">Decryption Result:</div>
+<div class="result" id="decrypted-result">Waiting to decrypt...</div>
+</div>
+<div class="status-info">
+<div class="status-item">
+<div class="status-label">Detected Lib 1 rotations</div>
+<div class="status-value" id="detected-lib1">00</div>
+</div>
+<div class="status-item">
+<div class="status-label">Detected Lib 2 rotations</div>
+<div class="status-value" id="detected-lib2">00</div>
+</div>
+<div class="status-item">
+<div class="status-label">Detected Lib 3 rotations</div>
+<div class="status-value" id="detected-lib3">00</div>
+</div>
+</div>
+</div>
+</div>
+<footer><p>Rotating Library Encryption Tool v15 © 2026 | Algorithm Design:Litaiqi_Daquavis</p></footer>
+</div>
+<script src="patches/inputCheck.js"></script>
+<script src="programs/jiami15.js"></script>
+<div aria-hidden="true" class="key-modal-overlay" hidden="" id="key-modal"><div aria-labelledby="key-modal-title" aria-modal="true" class="key-modal-dialog" role="dialog" tabindex="-1"><div class="key-modal-header"><div><h2 id="key-modal-title">Key Configuration</h2><p>Set every encryption and decryption key without leaving this page.</p></div><button aria-label="Close key configuration" class="key-modal-close" id="close-key-modal" type="button">×</button></div><div class="key-modal-body"><section class="key-modal-section" id="encrypt-key-section"><h3>Encryption keys</h3><div class="controls-grid" style="grid-template-columns: 1fr 1fr;">
+<div class="control-group">
+<label for="cbc-key">CBC key (4 characters):</label>
+<input id="cbc-key" maxlength="4" placeholder="4-character CBC key" type="text" value="XKEY">
+<div class="key-range">Controls the CBC XOR chain layer</div>
+</div>
+<div class="control-group">
+<label for="sha-key">SHA key:</label>
+<input id="sha-key" placeholder="SHA key (controls reversible mixing layer)" type="text" value="sha256">
+<div class="key-range">Controls SHA-95 reversible block mixing and state chain</div>
+</div>
+</div><div class="input-group">
+<label for="matrix-key">Matrix key (12 unique characters):</label>
+<input id="matrix-key" maxlength="12" placeholder="12-character matrix key" type="text" value="12hcd75ab390">
+<div class="key-range">v13/v14 custom 12x8 matrix first row; must be 12 unique characters</div>
+</div><div class="controls-grid-4">
+<div class="control-group">
+<label for="num-key">Numeric key(0-94):</label>
+<input id="num-key" max="94" min="0" step="1" type="number" value="1">
+<div class="key-range">Controls triple-library offset</div>
+</div>
+<div class="control-group">
+<label for="text-key">Text key (8 characters):</label>
+<input id="text-key" maxlength="8" placeholder="8-character text key" type="text" value="abcdefgh">
+<div class="key-range">Controls column transposition order</div>
+</div>
+<div class="control-group">
+<label for="noise-key">Noise key (seed):</label>
+<input id="noise-key" placeholder="Noise seed" type="text" value="perlin99">
+<div class="key-range">Controls the Perlin noise curve</div>
+</div>
+<div class="control-group">
+<label for="lib-status">Library state code (6 digits):</label>
+<input id="lib-status" maxlength="6" placeholder="e.g. 012345" type="text" value="000000">
+<div class="key-range">Initial rotations for the three libraries</div>
+</div>
+</div><div class="controls-grid" style="grid-template-columns: 1fr 1fr;">
+<div class="control-group">
+<label for="phantom-n">Phantom interval N:</label>
+<input id="phantom-n" max="99" min="1" step="1" type="number" value="5">
+<div class="key-range">Insert random text after every N real ciphertext characters</div>
+</div>
+<div class="control-group">
+<label for="phantom-m">Phantom length M:</label>
+<input id="phantom-m" max="99" min="0" step="1" type="number" value="3">
+<div class="key-range">Insert M random characters each time</div>
+</div>
+</div><div class="custom-library-box"><h4>Custom rotating-library order keys</h4><div class="key-range">Each field must be a complete permutation of the same 95 printable ASCII characters, including the final space.</div><div class="input-group"><label for="custom-lib1">Custom library 1 order (95 unique characters):</label><input autocomplete="off" id="custom-lib1" maxlength="95" spellcheck="false" type="text" value="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&amp;*()_+-=[]{}|;&#39;:\&quot;,./&lt;&gt;?`~ "><div class="key-range">Controls the base order of rotating library 1</div></div><div class="input-group"><label for="custom-lib2">Custom library 2 order (95 unique characters):</label><input autocomplete="off" id="custom-lib2" maxlength="95" spellcheck="false" type="text" value="1029384756qpwoeirutyalskdjfhgzmxncbvQPWOEIRUTYALSKDJFHGZMXNCBV!)@(#*$&amp;%^_+-={|}[]\:&quot;;&#39;&lt;?&gt;,/.~` "><div class="key-range">Controls the base order of rotating library 2</div></div><div class="input-group"><label for="custom-lib3">Custom library 3 order (95 unique characters):</label><input autocomplete="off" id="custom-lib3" maxlength="95" spellcheck="false" type="text" value="0192837465pqowieurytlaksjdhfgmznxbcvPQOWIEURYTLAKSJDHFGMZNXBCV)!(@*#&amp;$^%+_=-|{}\][&quot;:&#39;;?&lt;&gt;/,.~` "><div class="key-range">Controls the base order of rotating library 3</div></div></div></section><section class="key-modal-section" id="decrypt-key-section"><h3>Decryption keys</h3><div class="input-group">
+<label for="decrypt-cbc-key">CBC key (4 characters):</label>
+<input id="decrypt-cbc-key" maxlength="4" placeholder="CBC key used during encryption" type="text" value="XKEY">
+<div class="key-range">CBC key used during encryption</div>
+</div><div class="input-group">
+<label for="decrypt-sha-key">SHA key:</label>
+<input id="decrypt-sha-key" placeholder="SHA key used during encryption" type="text" value="sha256">
+<div class="key-range">SHA key used during encryption</div>
+</div><div class="input-group">
+<label for="decrypt-matrix-key">Matrix key (12 unique characters):</label>
+<input id="decrypt-matrix-key" maxlength="12" placeholder="Matrix key used during encryption" type="text" value="12hcd75ab390">
+<div class="key-range">v13/v14 matrix key used during encryption</div>
+</div><div class="controls-grid" style="grid-template-columns: 1fr 1fr;">
+<div class="control-group">
+<label for="decrypt-phantom-n">Phantom interval N:</label>
+<input id="decrypt-phantom-n" max="99" min="1" step="1" type="number" value="5">
+<div class="key-range">Phantom interval N used during encryption</div>
+</div>
+<div class="control-group">
+<label for="decrypt-phantom-m">Phantom length M:</label>
+<input id="decrypt-phantom-m" max="99" min="0" step="1" type="number" value="3">
+<div class="key-range">Phantom length M used during encryption</div>
+</div>
+</div><div class="controls-grid-4">
+<div class="control-group">
+<label for="decrypt-num-key">Numeric key(0-94):</label>
+<input id="decrypt-num-key" max="94" min="0" step="1" type="number" value="1">
+<div class="key-range">Numeric key used during encryption</div>
+</div>
+<div class="control-group">
+<label for="decrypt-text-key">Text key (8 characters):</label>
+<input id="decrypt-text-key" maxlength="8" placeholder="8-character text key" type="text" value="abcdefgh">
+<div class="key-range">Text key used during encryption</div>
+</div>
+<div class="control-group">
+<label for="decrypt-noise-key">Noise key (seed):</label>
+<input id="decrypt-noise-key" placeholder="Noise seed" type="text" value="perlin99">
+<div class="key-range">Noise seed used during encryption</div>
+</div>
+<div class="control-group">
+<label for="decrypt-state">Library state code (6 digits):</label>
+<input id="decrypt-state" maxlength="6" placeholder="State code from encryption output" type="text" value="000000">
+<div class="key-range">State code from encryption output</div>
+</div>
+</div><div class="custom-library-box"><h4>Custom rotating-library order keys</h4><div class="key-range">Each field must be a complete permutation of the same 95 printable ASCII characters, including the final space.</div><div class="input-group"><label for="decrypt-custom-lib1">Custom library 1 order (95 unique characters):</label><input autocomplete="off" id="decrypt-custom-lib1" maxlength="95" spellcheck="false" type="text" value="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&amp;*()_+-=[]{}|;&#39;:\&quot;,./&lt;&gt;?`~ "><div class="key-range">Controls the base order of rotating library 1</div></div><div class="input-group"><label for="decrypt-custom-lib2">Custom library 2 order (95 unique characters):</label><input autocomplete="off" id="decrypt-custom-lib2" maxlength="95" spellcheck="false" type="text" value="1029384756qpwoeirutyalskdjfhgzmxncbvQPWOEIRUTYALSKDJFHGZMXNCBV!)@(#*$&amp;%^_+-={|}[]\:&quot;;&#39;&lt;?&gt;,/.~` "><div class="key-range">Controls the base order of rotating library 2</div></div><div class="input-group"><label for="decrypt-custom-lib3">Custom library 3 order (95 unique characters):</label><input autocomplete="off" id="decrypt-custom-lib3" maxlength="95" spellcheck="false" type="text" value="0192837465pqowieurytlaksjdhfgmznxbcvPQOWIEURYTLAKSJDHFGMZNXBCV)!(@*#&amp;$^%+_=-|{}\][&quot;:&#39;;?&lt;&gt;/,.~` "><div class="key-range">Controls the base order of rotating library 3</div></div></div></section></div><div class="key-modal-actions"><button class="key-modal-secondary" id="cancel-key-modal" type="button">Cancel</button><button class="key-modal-primary" id="save-key-modal" type="button">Save &amp; Close</button></div></div></div><div aria-hidden="true" class="key-modal-overlay" hidden="" id="output-key-modal"><div aria-labelledby="output-key-modal-title" aria-modal="true" class="key-modal-dialog output-key-dialog" role="dialog" tabindex="-1"><div class="key-modal-header"><div><h2 id="output-key-modal-title">Encryption Output Keys</h2><p>Save these values together with the ciphertext. Use the final library state code for decryption.</p></div><button aria-label="Close output keys" class="key-modal-close" id="close-output-key-modal" type="button">×</button></div><div class="key-modal-body"><div class="output-key-card" style="border: 1px solid rgba(255,170,0,0.3);">
+<div class="result-label">Encryption Key Output</div>
+<div class="result" id="key-info-result" style="color: #ffaa00;">Waiting to encrypt...</div>
+<div style="color: #666; font-size: 0.8rem; margin-top: 5px; font-style: italic;">⚠️ Losing any key info will make decryption impossible!</div>
+</div></div><div class="key-modal-actions"><button class="key-modal-primary" id="done-output-key-modal" type="button">Done</button></div></div></div><div id="key-button-error-popup" class="key-button-error-popup" role="alert" hidden=""></div></body></html>

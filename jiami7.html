@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>甲醚</title>
+    <link rel="stylesheet" href="style/jiami13.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>甲醚</h1>
+            <div class="version-badge">v7 - \u5b8c\u6574\u7248</div>
+            <p class="subtitle">"Triple rotating libraries + position shuffle + chained avalanche + column transposition | separate key output"</p>
+            <div class="warning">To protect information security, do not let others view your screen or expose plaintext information.</div>
+        </header>
+        <div class="main-content">
+            <div class="section">
+                <h2>Encrypt</h2>
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="num-key">Numeric key (0-94):</label>
+                        <input type="number" id="num-key" min="0" max="94" value="1" step="1">
+                        <div class="key-range">Controls triple-library offset</div>
+                    </div>
+                    <div class="control-group">
+                        <label for="text-key">Text key (8 characters):</label>
+                        <input type="text" id="text-key" maxlength="8" value="abcdefgh" placeholder="8-character text key">
+                        <div class="key-range">Controls column transposition order</div>
+                    </div>
+                    <div class="control-group">
+                        <label for="lib-status">Library state code (6-digit number):</label>
+                        <input type="text" id="lib-status" maxlength="6" value="000000" placeholder="e.g. 012345">
+                        <div class="key-range">Lib 1 (2 digits)+Lib 2 (2 digits)+Lib 3 (2 digits)</div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="plaintext">Text to encrypt:</label>
+                    <textarea id="plaintext" placeholder="Enter the text to encrypt...">Made by Litaiqi_Daquavis</textarea>
+                </div>
+                <div class="btn-group">
+                    <button id="encrypt-btn" class="encrypt-btn"> Encrypt Text</button>
+                    <button id="clear-encrypt" class="clear-btn">Clear</button>
+                </div>
+                <div class="result-container">
+                    <div class="result-label">Encryption Result (Ciphertext):</div>
+                    <div id="encrypted-result" class="result" style="color: rgb(0, 255, 136);">9JR78$li8f+BJx^|Vq^zn/P |Y</div>
+                </div>
+                <div class="result-container" style="border: 1px solid rgba(255,170,0,0.3);">
+                    <div class="result-label">🔑 Key info (must be saved with the ciphertext and is required for decryption):</div>
+                    <div id="key-info-result" class="result" style="color: #ffaa00;">Numeric key: 1 | Text key: abcdefgh | State code: 434303</div>
+                    <div style="color: #666; font-size: 0.8rem; margin-top: 5px; font-style: italic;">⚠️ Losing key info will make decryption impossible！</div>
+                </div>
+                <div class="status-info">
+                    <div class="status-item">
+                        <div class="status-label">Lib 1current rotations</div>
+                        <div id="lib1-rotations" class="status-value">43</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Lib 2current rotations</div>
+                        <div id="lib2-rotations" class="status-value">43</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Lib 3current rotations</div>
+                        <div id="lib3-rotations" class="status-value">03</div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Decrypt</h2>
+                <div class="input-group">
+                    <label for="ciphertext">Text to decrypt:</label>
+                    <textarea id="ciphertext" placeholder="Enter the text to decrypt..."></textarea>
+                </div>
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="decrypt-num-key">Numeric key (0-94):</label>
+                        <input type="number" id="decrypt-num-key" min="0" max="94" value="1" step="1">
+                        <div class="key-range">Numeric key used during encryption</div>
+                    </div>
+                    <div class="control-group">
+                        <label for="decrypt-text-key">Text key (8 characters):</label>
+                        <input type="text" id="decrypt-text-key" maxlength="8" value="abcdefgh" placeholder="8-character text key">
+                        <div class="key-range">Text key used during encryption</div>
+                    </div>
+                    <div class="control-group">
+                        <label for="decrypt-state">Library state code (6 digits):</label>
+                        <input type="text" id="decrypt-state" maxlength="6" value="" placeholder="State code from encryption output">
+                        <div class="key-range">State code from encryption key info</div>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button id="decrypt-btn" class="encrypt-btn"> Decrypt Text</button>
+                    <button id="clear-decrypt" class="clear-btn">Clear</button>
+                </div>
+                <div class="result-container">
+                    <div class="result-label">Decryption Result:</div>
+                    <div id="decrypted-result" class="result" style="color: rgb(0, 255, 136);">Made from Litaiqi_Daquavis</div>
+                </div>
+                <div class="status-info">
+                    <div class="status-item">
+                        <div class="status-label">Detected Lib 1 rotations</div>
+                        <div id="detected-lib1" class="status-value">43</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Detected Lib 2 rotations</div>
+                        <div id="detected-lib2" class="status-value">43</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-label">Detected Lib 3 rotations</div>
+                        <div id="detected-lib3" class="status-value">03</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer><p>Rotating Library Encryption Tool v7 © 2026 | Algorithm Design:Litaiqi_Daquavis</p></footer>
+    </div>
+
+    <script src="programs/jiami7.js"></script>
+
+
+</body></html>
